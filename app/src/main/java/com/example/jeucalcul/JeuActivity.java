@@ -37,7 +37,6 @@ public class JeuActivity extends AppCompatActivity {
             return insets;
         });
 
-        // Liaison avec l'interface
         texteVies = findViewById(R.id.texte_vies);
         texteScore = findViewById(R.id.texte_score);
         texteCalcul = findViewById(R.id.texte_calcul);
@@ -45,10 +44,8 @@ public class JeuActivity extends AppCompatActivity {
         inputReponse = findViewById(R.id.input_reponse);
         boutonValider = findViewById(R.id.bouton_valider);
 
-        // Bloque le clavier virtuel Android
         inputReponse.setShowSoftInputOnFocus(false);
 
-        // Correction : On affiche directement les vies au démarrage de la page
         texteVies.setText(getString(R.string.texte_vies) + vies);
         texteErreur.setText("");
 
@@ -62,7 +59,7 @@ public class JeuActivity extends AppCompatActivity {
         View.OnClickListener listenerChiffres = v -> {
             Button b = (Button) v;
             inputReponse.append(b.getText().toString());
-            texteErreur.setText(""); // On efface le message d'erreur dès que le joueur re-tape
+            texteErreur.setText("");
         };
 
         int[] idsChiffres = {R.id.btn_0, R.id.btn_1, R.id.btn_2, R.id.btn_3, R.id.btn_4, R.id.btn_5, R.id.btn_6, R.id.btn_7, R.id.btn_8, R.id.btn_9};
@@ -107,14 +104,13 @@ public class JeuActivity extends AppCompatActivity {
                 break;
         }
         inputReponse.setText("");
-        texteErreur.setText(""); // Nettoie l'affichage des erreurs pour le nouveau calcul
+        texteErreur.setText("");
     }
 
     private void verifierReponse() {
         String saisie = inputReponse.getText().toString();
 
         if (saisie.isEmpty()) {
-            // Plus de Toast, on écrit directement dans notre TextView rouge
             texteErreur.setText(getString(R.string.erreur_vide));
             return;
         }
@@ -133,7 +129,6 @@ public class JeuActivity extends AppCompatActivity {
                 boutonValider.setEnabled(false);
                 afficherPopupFinJeu();
             } else {
-                // Plus de Toast, affichage direct de l'erreur sur l'écran
                 texteErreur.setText(getString(R.string.erreur_faux));
                 inputReponse.setText("");
             }

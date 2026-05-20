@@ -49,7 +49,6 @@ public class HighscoreActivity extends AppCompatActivity {
             cursor.close();
             texteScoresListe.setText(builder.toString());
         } else {
-            // Le changement est ici
             texteScoresListe.setText(getString(R.string.aucun_score));
         }
     }
