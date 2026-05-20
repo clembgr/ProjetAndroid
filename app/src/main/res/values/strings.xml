@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">JeuCalcul</string>
+    <string name="titre_menu">Jeu de calcul</string>
+    <string name="bouton_jouer">Jouer</string>
+    <string name="bouton_highscore">Meilleur score</string>
+
+    <string name="texte_vies">Vies: </string>
+    <string name="texte_score">Score: </string>
+    <string name="hint_reponse">Votre réponse</string>
+    <string name="bouton_valider">Valider</string>
+
+    <string name="titre_top10">Top 10 Scores</string>
+    <string name="aucun_score">Aucun score pour le moment.</string>
+
+    <string name="erreur_vide">Veuillez entrer une réponse</string>
+    <string name="erreur_faux">Faux ! Essaie encore.</string>
+    <string name="game_over_titre">Game Over !</string>
+    <string name="game_over_msg1">Ton score est de </string>
+    <string name="game_over_msg2">. Rentre ton nom :</string>
+    <string name="hint_pseudo">Ton pseudo</string>
+    <string name="bouton_enregistrer">Enregistrer</string>
+
+</resources>
