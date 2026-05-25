@@ -7,6 +7,15 @@
     android:padding="20dp"
     android:background="#F0F4F8">
 
+    <ImageButton
+        android:id="@+id/bouton_retour"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:backgroundTint="#2196F3"
+        android:src="@drawable/ic_fleche_retour"
+        android:contentDescription="@string/bouton_retour"
+        android:scaleType="centerInside" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

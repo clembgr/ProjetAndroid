@@ -2,6 +2,7 @@ package com.example.jeucalcul;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -13,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class HighscoreActivity extends AppCompatActivity {
 
     private TextView texteScoresListe;
+    private android.widget.ImageButton boutonRetour;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +29,9 @@ public class HighscoreActivity extends AppCompatActivity {
         });
 
         texteScoresListe = findViewById(R.id.texte_scores_liste);
+        boutonRetour = findViewById(R.id.bouton_retour);
+
+        boutonRetour.setOnClickListener(v -> finish()); // Ferme l'activité et retourne au menu
 
         afficherScores();
     }

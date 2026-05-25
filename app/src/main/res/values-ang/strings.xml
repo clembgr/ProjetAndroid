@@ -17,4 +17,11 @@
     <string name="game_over_msg2">. Enter your name:</string>
     <string name="hint_pseudo">Your nickname</string>
     <string name="bouton_enregistrer">Save</string>
+    <string name="bouton_retour">Back</string>
+    <string name="succes_reponse">Correct answer!</string>
+    <string name="erreur_limite_nombre">Number too large!</string>
+    <string name="quitter_titre">Quit game?</string>
+    <string name="quitter_msg">Any unsaved progress will be lost.</string>
+    <string name="quitter_confirmer">Quit</string>
+    <string name="quitter_annuler">Cancel</string>
 </resources>

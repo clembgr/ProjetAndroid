@@ -1,5 +1,7 @@
 package com.example.jeucalcul;
 
+import android.app.AlertDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +22,7 @@ public class JeuActivity extends AppCompatActivity {
     private EditText inputReponse;
     private Button boutonValider;
 
+    private android.widget.ImageButton boutonRetour;
     private int vies = 3;
     private int score = 0;
     private int bonneReponse = 0;
@@ -43,6 +46,7 @@ public class JeuActivity extends AppCompatActivity {
         texteErreur = findViewById(R.id.texte_erreur);
         inputReponse = findViewById(R.id.input_reponse);
         boutonValider = findViewById(R.id.bouton_valider);
+        boutonRetour = findViewById(R.id.bouton_retour);
 
         inputReponse.setShowSoftInputOnFocus(false);
 
@@ -53,13 +57,14 @@ public class JeuActivity extends AppCompatActivity {
         genererCalcul();
 
         boutonValider.setOnClickListener(v -> verifierReponse());
+
+        boutonRetour.setOnClickListener(v -> afficherPopupQuitter());
     }
 
     private void configurerClavier() {
         View.OnClickListener listenerChiffres = v -> {
             Button b = (Button) v;
             inputReponse.append(b.getText().toString());
-            texteErreur.setText("");
         };
 
         int[] idsChiffres = {R.id.btn_0, R.id.btn_1, R.id.btn_2, R.id.btn_3, R.id.btn_4, R.id.btn_5, R.id.btn_6, R.id.btn_7, R.id.btn_8, R.id.btn_9};
@@ -69,7 +74,6 @@ public class JeuActivity extends AppCompatActivity {
 
         findViewById(R.id.btn_clear).setOnClickListener(v -> {
             inputReponse.setText("");
-            texteErreur.setText("");
         });
     }
 
@@ -85,8 +89,10 @@ public class JeuActivity extends AppCompatActivity {
                 texteCalcul.setText(num1 + " + " + num2 + " = ?");
                 break;
             case 1:
-                num1 = random.nextInt(50) + 1;
-                num2 = random.nextInt(50) + 1;
+                int temp1 = random.nextInt(50) + 1;
+                int temp2 = random.nextInt(50) + 1;
+                num1 = Math.max(temp1, temp2);
+                num2 = Math.min(temp1, temp2);
                 bonneReponse = num1 - num2;
                 texteCalcul.setText(num1 + " - " + num2 + " = ?");
                 break;
@@ -104,26 +110,39 @@ public class JeuActivity extends AppCompatActivity {
                 break;
         }
         inputReponse.setText("");
-        texteErreur.setText("");
     }
 
     private void verifierReponse() {
         String saisie = inputReponse.getText().toString();
 
         if (saisie.isEmpty()) {
+            texteErreur.setTextColor(Color.RED);
             texteErreur.setText(getString(R.string.erreur_vide));
             return;
         }
 
-        int reponseJoueur = Integer.parseInt(saisie);
+        int reponseJoueur;
+        try {
+            reponseJoueur = Integer.parseInt(saisie);
+        } catch (NumberFormatException e) {
+            texteErreur.setTextColor(Color.RED);
+            texteErreur.setText(getString(R.string.erreur_limite_nombre));
+            inputReponse.setText("");
+            return;
+        }
 
         if (reponseJoueur == bonneReponse) {
             score++;
             texteScore.setText(getString(R.string.texte_score) + score);
+
+            texteErreur.setTextColor(Color.parseColor("#4CAF50"));
+            texteErreur.setText(getString(R.string.succes_reponse));
+
             genererCalcul();
         } else {
             vies--;
             texteVies.setText(getString(R.string.texte_vies) + vies);
+            texteErreur.setTextColor(Color.RED);
 
             if (vies <= 0) {
                 boutonValider.setEnabled(false);
@@ -135,10 +154,27 @@ public class JeuActivity extends AppCompatActivity {
         }
     }
 
+    private void afficherPopupQuitter() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.quitter_titre));
+        builder.setMessage(getString(R.string.quitter_msg));
+
+        builder.setPositiveButton(getString(R.string.quitter_confirmer), (dialog, which) -> {
+            finish();
+        });
+
+        builder.setNegativeButton(getString(R.string.quitter_annuler), (dialog, which) -> {
+            dialog.dismiss();
+        });
+
+        builder.setCancelable(true);
+        builder.show();
+    }
+
     private void afficherPopupFinJeu() {
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.game_over_titre));
-        builder.setMessage(getString(R.string.game_over_msg1) + score + getString(R.string.game_over_msg2));
+        builder.setMessage(getString(R.string.game_over_msg1) + " " + score + getString(R.string.game_over_msg2));
 
         final EditText inputNom = new EditText(this);
         inputNom.setHint(getString(R.string.hint_pseudo));

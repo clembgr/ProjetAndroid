@@ -20,4 +20,12 @@
     <string name="hint_pseudo">Ton pseudo</string>
     <string name="bouton_enregistrer">Enregistrer</string>
 
+    <string name="bouton_retour">Retour</string>
+    <string name="succes_reponse">Bonne réponse !</string>
+    <string name="erreur_limite_nombre">Nombre trop grand !</string>
+    <string name="quitter_titre">Quitter le jeu ?</string>
+    <string name="quitter_msg">Toute progression non enregistrée sera perdue.</string>
+    <string name="quitter_confirmer">Quitter</string>
+    <string name="quitter_annuler">Annuler</string>
+
 </resources>
