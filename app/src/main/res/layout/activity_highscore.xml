@@ -13,20 +13,46 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="start"
-        android:backgroundTint="#2196F3"
-        android:src="@drawable/ic_fleche_retour"
+        android:backgroundTint="#102A43"
         android:contentDescription="@string/bouton_retour"
-        android:scaleType="centerInside" />
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_fleche_retour" />
 
     <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="@string/titre_top10"
-    android:textSize="36sp"
-    android:textStyle="bold"
-    android:textColor="#102A43"
-    android:layout_marginTop="30dp"
-    android:layout_marginBottom="30dp" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/titre_top10"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        android:textColor="#102A43"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="10dp">
+
+        <Button
+            android:id="@+id/onglet_classique"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            android:backgroundTint="#102A43"
+            android:text="@string/bouton_classique" />
+
+        <Button
+            android:id="@+id/onglet_competition"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/bouton_competition"
+            android:backgroundTint="#B0BEC5"
+            android:layout_marginStart="5dp"/>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,13 +65,13 @@
 
         <TextView
             android:id="@+id/texte_scores_liste"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/aucun_score"
             android:textSize="24sp"
             android:textColor="#333333"
             android:lineSpacingExtra="14dp"
-            android:gravity="center"
+            android:layout_gravity="center_horizontal"
             android:textStyle="bold" />
 
     </LinearLayout>

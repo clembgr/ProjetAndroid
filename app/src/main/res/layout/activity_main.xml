@@ -38,6 +38,7 @@
             android:backgroundTint="#4CAF50"
             android:layout_marginBottom="16dp" />
 
+
         <Button
             android:id="@+id/bouton_highscore"
             android:layout_width="match_parent"

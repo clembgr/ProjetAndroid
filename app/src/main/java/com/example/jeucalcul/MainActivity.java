@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         boutonHighscore = findViewById(R.id.bouton_highscore);
 
         boutonJeu.setOnClickListener(v -> {
-            Intent intent = new Intent(this, JeuActivity.class);
+            Intent intent = new Intent(this, ModeActivity.class);
             startActivity(intent);
         });
 

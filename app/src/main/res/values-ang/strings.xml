@@ -24,4 +24,13 @@
     <string name="quitter_msg">Any unsaved progress will be lost.</string>
     <string name="quitter_confirmer">Quit</string>
     <string name="quitter_annuler">Cancel</string>
+
+    <string name="bouton_competition">Competition</string>
+    <string name="bouton_classique">Classic</string>
+    <string name="texte_temps">Time: </string>
+    <string name="temps_ecoule">Time is up!</string>
+
+    <string name="titre_choix_mode">Mode Selection</string>
+    <string name="regles_jeu">Classic: 3 lives, no time limit.\n\nCompetition: Sudden death (1 mistake = game over). You have 10s per calculation. The time decreases by 1s every 10 points (minimum 3s).</string>
+    <string name="format_temps">Time: %.2fs / %ds</string>
 </resources>

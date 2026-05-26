@@ -3,6 +3,8 @@ package com.example.jeucalcul;
 import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +16,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.Locale;
 import java.util.Random;
 
 public class JeuActivity extends AppCompatActivity {
@@ -21,12 +24,16 @@ public class JeuActivity extends AppCompatActivity {
     private TextView texteVies, texteScore, texteCalcul, texteErreur;
     private EditText inputReponse;
     private Button boutonValider;
-
     private android.widget.ImageButton boutonRetour;
+
     private int vies = 3;
     private int score = 0;
     private int bonneReponse = 0;
     private Random random = new Random();
+
+    private boolean isCompetition;
+    private CountDownTimer timer;
+    private AlertDialog dialogQuitter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +47,8 @@ public class JeuActivity extends AppCompatActivity {
             return insets;
         });
 
+        isCompetition = getIntent().getBooleanExtra("MODE_COMPETITION", false);
+
         texteVies = findViewById(R.id.texte_vies);
         texteScore = findViewById(R.id.texte_score);
         texteCalcul = findViewById(R.id.texte_calcul);
@@ -49,16 +58,29 @@ public class JeuActivity extends AppCompatActivity {
         boutonRetour = findViewById(R.id.bouton_retour);
 
         inputReponse.setShowSoftInputOnFocus(false);
-
-        texteVies.setText(getString(R.string.texte_vies) + vies);
         texteErreur.setText("");
+
+        if (isCompetition) {
+            texteVies.setTextColor(Color.parseColor("#FF9800"));
+        } else {
+            texteVies.setText(getString(R.string.texte_vies) + vies);
+        }
 
         configurerClavier();
         genererCalcul();
 
         boutonValider.setOnClickListener(v -> verifierReponse());
-
         boutonRetour.setOnClickListener(v -> afficherPopupQuitter());
+
+        inputReponse.setOnKeyListener((v, keyCode, event) -> {
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                if (boutonValider.isEnabled()) {
+                    verifierReponse();
+                }
+                return true;
+            }
+            return false;
+        });
     }
 
     private void configurerClavier() {
@@ -110,6 +132,47 @@ public class JeuActivity extends AppCompatActivity {
                 break;
         }
         inputReponse.setText("");
+
+        if (isCompetition) {
+            demarrerTimer();
+        }
+    }
+
+    private void demarrerTimer() {
+        if (timer != null) {
+            timer.cancel();
+        }
+
+        int secondesAllouees = Math.max(3, 10 - (score / 10));
+        long tempsAlloueMillis = secondesAllouees * 1000L;
+
+        timer = new CountDownTimer(tempsAlloueMillis, 50) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                double sec = millisUntilFinished / 1000.0;
+                texteVies.setText(String.format(Locale.getDefault(), getString(R.string.format_temps), sec, secondesAllouees));
+            }
+
+            @Override
+            public void onFinish() {
+                texteVies.setText(String.format(Locale.getDefault(), getString(R.string.format_temps), 0.0, secondesAllouees));
+                texteErreur.setTextColor(Color.RED);
+                texteErreur.setText(getString(R.string.temps_ecoule));
+                boutonValider.setEnabled(false);
+
+                if (dialogQuitter != null && dialogQuitter.isShowing()) {
+                    dialogQuitter.dismiss();
+                }
+
+                afficherPopupFinJeu();
+            }
+        }.start();
+    }
+
+    private void arreterTimer() {
+        if (timer != null) {
+            timer.cancel();
+        }
     }
 
     private void verifierReponse() {
@@ -134,22 +197,26 @@ public class JeuActivity extends AppCompatActivity {
         if (reponseJoueur == bonneReponse) {
             score++;
             texteScore.setText(getString(R.string.texte_score) + score);
-
             texteErreur.setTextColor(Color.parseColor("#4CAF50"));
             texteErreur.setText(getString(R.string.succes_reponse));
-
             genererCalcul();
         } else {
-            vies--;
-            texteVies.setText(getString(R.string.texte_vies) + vies);
             texteErreur.setTextColor(Color.RED);
-
-            if (vies <= 0) {
+            if (isCompetition) {
+                arreterTimer();
                 boutonValider.setEnabled(false);
+                texteErreur.setText(getString(R.string.erreur_faux));
                 afficherPopupFinJeu();
             } else {
-                texteErreur.setText(getString(R.string.erreur_faux));
-                inputReponse.setText("");
+                vies--;
+                texteVies.setText(getString(R.string.texte_vies) + vies);
+                if (vies <= 0) {
+                    boutonValider.setEnabled(false);
+                    afficherPopupFinJeu();
+                } else {
+                    texteErreur.setText(getString(R.string.erreur_faux));
+                    inputReponse.setText("");
+                }
             }
         }
     }
@@ -160,6 +227,7 @@ public class JeuActivity extends AppCompatActivity {
         builder.setMessage(getString(R.string.quitter_msg));
 
         builder.setPositiveButton(getString(R.string.quitter_confirmer), (dialog, which) -> {
+            arreterTimer();
             finish();
         });
 
@@ -167,11 +235,12 @@ public class JeuActivity extends AppCompatActivity {
             dialog.dismiss();
         });
 
-        builder.setCancelable(true);
-        builder.show();
+        builder.setCancelable(false);
+        dialogQuitter = builder.show();
     }
 
     private void afficherPopupFinJeu() {
+        arreterTimer();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.game_over_titre));
         builder.setMessage(getString(R.string.game_over_msg1) + " " + score + getString(R.string.game_over_msg2));
@@ -187,12 +256,18 @@ public class JeuActivity extends AppCompatActivity {
             }
 
             BDHelper db = new BDHelper(JeuActivity.this);
-            db.ajouterScore(nom, score);
+            db.ajouterScore(nom, score, isCompetition);
 
             finish();
         });
 
         builder.setCancelable(false);
         builder.show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        arreterTimer();
     }
 }
