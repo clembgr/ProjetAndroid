@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -34,6 +36,9 @@ public class JeuActivity extends AppCompatActivity {
     private boolean isCompetition;
     private CountDownTimer timer;
     private AlertDialog dialogQuitter;
+
+    private final Handler handlerMessage = new Handler(Looper.getMainLooper());
+    private final Runnable runnableEffacerMessage = () -> texteErreur.setText("");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +104,19 @@ public class JeuActivity extends AppCompatActivity {
         });
     }
 
+    private void afficherMessageTemporaire(String message, String couleurHex) {
+        handlerMessage.removeCallbacks(runnableEffacerMessage);
+
+        texteErreur.setText("");
+
+        handlerMessage.postDelayed(() -> {
+            texteErreur.setTextColor(Color.parseColor(couleurHex));
+            texteErreur.setText(message);
+        }, 100);
+
+        handlerMessage.postDelayed(runnableEffacerMessage, 3050); // Disparition après 3s
+    }
+
     private void genererCalcul() {
         int typeOperation = random.nextInt(4);
         int num1, num2;
@@ -156,9 +174,8 @@ public class JeuActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 texteVies.setText(String.format(Locale.getDefault(), getString(R.string.format_temps), 0.0, secondesAllouees));
-                texteErreur.setTextColor(Color.RED);
-                texteErreur.setText(getString(R.string.temps_ecoule));
                 boutonValider.setEnabled(false);
+                afficherMessageTemporaire(getString(R.string.temps_ecoule), "#F44336"); // Rouge
 
                 if (dialogQuitter != null && dialogQuitter.isShowing()) {
                     dialogQuitter.dismiss();
@@ -179,8 +196,7 @@ public class JeuActivity extends AppCompatActivity {
         String saisie = inputReponse.getText().toString();
 
         if (saisie.isEmpty()) {
-            texteErreur.setTextColor(Color.RED);
-            texteErreur.setText(getString(R.string.erreur_vide));
+            afficherMessageTemporaire(getString(R.string.erreur_vide), "#F44336");
             return;
         }
 
@@ -188,8 +204,7 @@ public class JeuActivity extends AppCompatActivity {
         try {
             reponseJoueur = Integer.parseInt(saisie);
         } catch (NumberFormatException e) {
-            texteErreur.setTextColor(Color.RED);
-            texteErreur.setText(getString(R.string.erreur_limite_nombre));
+            afficherMessageTemporaire(getString(R.string.erreur_limite_nombre), "#F44336");
             inputReponse.setText("");
             return;
         }
@@ -197,15 +212,13 @@ public class JeuActivity extends AppCompatActivity {
         if (reponseJoueur == bonneReponse) {
             score++;
             texteScore.setText(getString(R.string.texte_score) + score);
-            texteErreur.setTextColor(Color.parseColor("#4CAF50"));
-            texteErreur.setText(getString(R.string.succes_reponse));
+            afficherMessageTemporaire(getString(R.string.succes_reponse), "#4CAF50"); // Vert
             genererCalcul();
         } else {
-            texteErreur.setTextColor(Color.RED);
             if (isCompetition) {
                 arreterTimer();
                 boutonValider.setEnabled(false);
-                texteErreur.setText(getString(R.string.erreur_faux));
+                afficherMessageTemporaire(getString(R.string.erreur_faux), "#F44336");
                 afficherPopupFinJeu();
             } else {
                 vies--;
@@ -214,7 +227,7 @@ public class JeuActivity extends AppCompatActivity {
                     boutonValider.setEnabled(false);
                     afficherPopupFinJeu();
                 } else {
-                    texteErreur.setText(getString(R.string.erreur_faux));
+                    afficherMessageTemporaire(getString(R.string.erreur_faux), "#F44336");
                     inputReponse.setText("");
                 }
             }
@@ -241,6 +254,8 @@ public class JeuActivity extends AppCompatActivity {
 
     private void afficherPopupFinJeu() {
         arreterTimer();
+        handlerMessage.removeCallbacks(runnableEffacerMessage);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.game_over_titre));
         builder.setMessage(getString(R.string.game_over_msg1) + " " + score + getString(R.string.game_over_msg2));
@@ -269,5 +284,6 @@ public class JeuActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         arreterTimer();
+        handlerMessage.removeCallbacksAndMessages(null);
     }
 }

@@ -4,8 +4,8 @@
     <string name="titre_menu">Math game</string>
     <string name="bouton_jouer">Play</string>
     <string name="bouton_highscore">Highscores</string>
-    <string name="texte_vies">Lifes:</string>
-    <string name="texte_score">Score:</string>
+    <string name="texte_vies">"Lifes : "</string>
+    <string name="texte_score">"Score : "</string>
     <string name="hint_reponse">Your answer</string>
     <string name="bouton_valider">Submit</string>
     <string name="titre_top10">Top 10 Scores</string>

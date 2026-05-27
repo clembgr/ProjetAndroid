@@ -20,7 +20,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="20dp">
+        android:background="#FFFFFF"
+        android:elevation="6dp"
+        android:padding="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="8dp">
 
         <TextView
             android:id="@+id/texte_vies"
@@ -28,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/texte_vies"
-            android:textSize="22sp"
+            android:textSize="26sp"
             android:textStyle="bold"
             android:textColor="#FF0000" />
 
@@ -36,9 +40,10 @@
             android:id="@+id/texte_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Score: 0"
-            android:textSize="22sp"
-            android:textStyle="bold" />
+            android:text="Score : 0"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="#102A43" />
     </LinearLayout>
 
     <LinearLayout
@@ -47,7 +52,11 @@
         android:layout_weight="1"
         android:background="#FFFFFF"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:elevation="4dp"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp">
 
         <TextView
             android:id="@+id/texte_calcul"
@@ -56,7 +65,8 @@
             android:layout_marginBottom="20dp"
             android:text="5 + 3 = ?"
             android:textSize="44sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="#102A43" />
 
         <EditText
             android:id="@+id/input_reponse"
@@ -74,7 +84,6 @@
             android:gravity="center"
             android:minHeight="26dp"
             android:text=""
-            android:textColor="#F44336"
             android:textSize="18sp"
             android:textStyle="bold" />
     </LinearLayout>

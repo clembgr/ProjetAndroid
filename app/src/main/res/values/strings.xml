@@ -4,8 +4,8 @@
     <string name="bouton_jouer">Jouer</string>
     <string name="bouton_highscore">Meilleur score</string>
 
-    <string name="texte_vies">Vies: </string>
-    <string name="texte_score">Score: </string>
+    <string name="texte_vies">"Vies : "</string>
+    <string name="texte_score">"Score : "</string>
     <string name="hint_reponse">Votre réponse</string>
     <string name="bouton_valider">Valider</string>
 
@@ -35,7 +35,5 @@
     <string name="titre_choix_mode">Choix du mode</string>
     <string name="regles_jeu">Classique : 3 vies, pas de limite de temps.\n\nCompétition : Mort subite (1 erreur = perdu). Tu as 10s par calcul. Le temps diminue de 1s tous les 10 points (minimum 3s).</string>
     <string name="format_temps">Temps: %.2fs / %ds</string>
-
-
 
 </resources>
